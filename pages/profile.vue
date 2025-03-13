@@ -23,7 +23,7 @@
         >
           <h2 class="profile__categories-text">{{ category.name }}</h2>
           <div class="profile__categories-btnblock">
-            <button class="btn profile__category-btn" @click="openEditCategoryModal(category)">
+            <button class="btn profile__category-btn" @click.stop="openEditCategoryModal(category)">
               Изменить
             </button>
             <button class="btn profile__category-btn profile__delete-btn" @click.stop="openDeleteCategoryModal(category)">
@@ -91,7 +91,7 @@
       </div>
     </main>
   </section>
-  <Modal v-if="showCategoryModal" @close="showCategoryModal = false">
+  <Modal v-if="showCategoryModal" @close="handleCategoryModalClose">
     <div class="event__modal modal">
       <h3 class="event-modal__title">{{ editingCategory ? 'Изменить категорию' : 'Создать категорию' }}</h3>
       <div class="event-modal__inpblock">
@@ -202,6 +202,12 @@ const toggleAside = () => {
   }
 }
 
+const handleCategoryModalClose = () => {
+  showCategoryModal.value = false
+  editingCategory.value = null // Сбрасываем редактируемую категорию
+  newCategoryName.value = '' // Очищаем поле ввода
+}
+
 const handleResize = () => {
   isMobile.value = window.innerWidth <= 859
   if (!isMobile.value) {
@@ -236,15 +242,13 @@ const addCategory = () => {
   showCategoryModal.value = false;
   saveUserEvents(categories.value);
   selectCategory(newCategory);
-  if (isMobile.value) {
-    aside.value = false;
-  }
+
   document.body.style.overflow = '' 
 };
 
 const selectCategory = (category) => {
   selectedCategory.value = category;
-  aside.value = !aside.value;
+  toggleAside()
 };
 
 const openAddTodoModal = () => {
@@ -286,17 +290,11 @@ const clearImage = () => {
 
 const openCategoryModal = () => {
   showCategoryModal.value = true;
-  if (isMobile.value) {
-    aside.value = false;
-  }
   document.body.style.overflow = '' 
 };
 
 const openDeleteAllCategoriesModal = () => {
   showDeleteAllCategoriesModal.value = true;
-  if (isMobile.value) {
-    aside.value = false;
-  }
   document.body.style.overflow = '' 
 };
 
