@@ -75,19 +75,9 @@ onMounted(() => {
   padding: 5px
   @include transition
   
-.form__btn
-  background: $yellow !important
-
-@include hover
-  .form__btn:hover
-      background: $light-grey !important
-
 @include mobile
   .form
     max-width: 350px
     width: 100%
-
-  .form__btn:active
-    background: $light-grey !important
 
 </style>
