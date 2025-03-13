@@ -91,7 +91,7 @@
       </div>
     </main>
   </section>
-  <Modal v-if="showCategoryModal" @close="handleCategoryModalClose">
+  <Modal v-if="showCategoryModal" @click.stop @close="handleCategoryModalClose">
     <div class="event__modal modal">
       <h3 class="event-modal__title">{{ editingCategory ? 'Изменить категорию' : 'Создать категорию' }}</h3>
       <div class="event-modal__inpblock">
