@@ -191,13 +191,13 @@ const shouldShowAside = computed(() => {
 
 const toggleAside = () => {
   if (aside.value) {
-    // Закрытие aside
-    animateAsideClose('.profile__aside');
+    animateAsideClose('.profile__aside', () => {
+      aside.value = false;
+    });
   } else {
-    // Открытие aside
+    aside.value = true;
     animateAsideOpen('.profile__aside');
   }
-  aside.value = !aside.value;
 };
 
 const handleResize = () => {
@@ -217,9 +217,7 @@ const completedTodos = computed(() => selectedCategory.value?.todos.filter(todo 
 
 const filteredTodos = computed(() => {
   if (!selectedCategory.value?.todos) return [];
-  
   const searchTerm = searchQuery.value.toLowerCase();
-  
   return selectedCategory.value.todos.filter(todo => {
     const titleMatch = todo.title?.toLowerCase().includes(searchTerm);
     const textMatch = todo.text?.toLowerCase().includes(searchTerm);
@@ -576,8 +574,8 @@ watch(categories, (newCategories) => {
     width: 100%
     height: 100%
     z-index: 9
-    opacity: 0
     padding: 20px
+    transform: translateX(-100%)
     @include transition
 
   .profile__aside-btn

@@ -48,11 +48,7 @@ export function animateDropdownClose(selector) {
 export function animateAsideOpen(selector) {
   const element = document.querySelector(selector);
   if (!element) return;
-
-  // Устанавливаем начальные стили
-  gsap.set(element, { opacity: 0 });
-
-  // Анимация появления
+  gsap.set(element, { opacity: 1 });
   gsap.to(element, {
     opacity: 1,
     x: '0%',
@@ -61,19 +57,17 @@ export function animateAsideOpen(selector) {
   });
 }
 
-export function animateAsideClose(selector) {
+export function animateAsideClose(selector, onComplete) {
   const element = document.querySelector(selector);
   if (!element) return;
-
-  // Анимация скрытия
   gsap.to(element, {
-    opacity: 0,
+    x: '-100%',
+    opacity: 1,
     duration: 0.5,
     ease: 'power2.in',
     onComplete: () => {
-      // Скрываем элемент после завершения анимации
-      element.style.display = 'none';
-    },
+      if (onComplete) onComplete();
+    }
   });
 }
 
