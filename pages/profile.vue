@@ -92,10 +92,10 @@
     </main>
   </section>
   <Modal v-if="showCategoryModal" @click.stop @close="handleCategoryModalClose">
-    <div class="event__modal modal">
+    <div class="event__modal modal" @click.stop>
       <h3 class="event-modal__title">{{ editingCategory ? 'Изменить категорию' : 'Создать категорию' }}</h3>
       <div class="event-modal__inpblock">
-        <input class="event-modal__inp inp" type="text" maxlength="40" v-model="newCategoryName" required placeholder="Название категории" />
+        <input class="event-modal__inp inp" @click.stop @touchstart.stop type="text" maxlength="40" v-model="newCategoryName" required placeholder="Название категории" />
         <p>{{ newCategoryName.length }}/40</p>
       </div>
       <button class="event-modal__btn btn" @click="editingCategory ? editCategory() : addCategory()">
@@ -103,7 +103,7 @@
       </button>      
     </div>
   </Modal>
-  <Modal v-if="showTodoModal" @close="showTodoModal = false">
+  <Modal v-if="showTodoModal" @close="closeTodoModal">
     <div class="event__modal modal">
       <h3 class="event-modal__title">{{ currentTodo.id ? 'Изменить' : 'Создать' }} Событие</h3>
       <img class="event-modal__img" v-if="currentTodo.img" :src="currentTodo.img" alt="Превью" /> 
@@ -133,21 +133,21 @@
       <button class="btn" @click="saveTodo">{{ currentTodo.id ? 'Сохранить' : 'Создать' }}</button>
     </div> 
   </Modal>
-  <Modal v-if="showDeleteAllCategoriesModal" @close="showDeleteAllCategoriesModal = false">
+  <Modal v-if="showDeleteAllCategoriesModal" @close="closeDeleteAllCategoriesModal">
     <div class="event__modal modal">
       <h3 class="event-modal__title">Удалить все категории</h3>
       <p>Вы уверены, что хотите удалить все категории? Это действие необратимо.</p>
       <button class="event-modal__btn profile__delete-btn btn" @click="deleteAllCategories">Удалить</button>
     </div>
   </Modal>
-  <Modal v-if="showDeleteCategoryModal" @close="showDeleteCategoryModal = false">
+  <Modal v-if="showDeleteCategoryModal" @close="closeDeleteCategoryModal">
     <div class="event__modal modal">
       <h3 class="event-modal__title">Удалить категорию</h3>
       <p>Вы уверены, что хотите удалить категорию "{{ categoryToDelete?.name }}"? Это действие необратимо.</p>
       <button class="event-modal__btn profile__delete-btn btn" @click="deleteCategory">Удалить</button>
     </div>
   </Modal>
-  <Modal v-if="showDeleteTodoModal" @close="showDeleteTodoModal = false">
+  <Modal v-if="showDeleteTodoModal" @close="closeDeleteTodoModal">
     <div class="event__modal modal">
       <h3 class="event-modal__title">Удалить событие</h3>
       <p>Вы уверены, что хотите удалить событие "{{ todoToDelete?.title }}"? Это действие необратимо.</p>
@@ -186,17 +186,23 @@ const shouldShowAside = computed(() => {
   return isMobile.value ? aside.value : true;
 });
 
+const toggleBodyScroll = (disable) => {
+  if (disable) {
+    document.body.style.overflow = 'hidden';
+  } else {
+        document.body.style.overflow = '';
+  }
+};
+
 const toggleAside = () => {
   if (!isMobile.value) return 
   
   if (aside.value) {
     animateAsideClose('.profile__aside', () => {
       aside.value = false
-      document.body.style.overflow = ''
     })
   } else {
     aside.value = true
-    document.body.style.overflow = 'hidden'
     animateAsideOpen('.profile__aside')
   }
 }
@@ -205,18 +211,22 @@ const handleCategoryModalClose = () => {
   showCategoryModal.value = false
   editingCategory.value = null 
   newCategoryName.value = '' 
+  toggleBodyScroll(false);
 }
 
 const handleResize = () => {
-  isMobile.value = window.innerWidth <= 859
-  if (!isMobile.value) {
-    aside.value = true
-    document.body.style.overflow = '' 
-  } else {
-    aside.value = false
-    document.body.style.overflow = '' 
+  const wasMobile = isMobile.value;
+  isMobile.value = window.innerWidth <= 859;
+  if (wasMobile !== isMobile.value) {
+    if (!isMobile.value) {
+      aside.value = true;
+      ;
+    } else {
+      aside.value = false;
+      ;
+    }
   }
-}
+};
 
 const getPendingCount = (category) => {
   return category.todos?.filter(todo => todo.status === 'pending').length || 0
@@ -257,11 +267,18 @@ const selectCategory = (category) => {
 const openAddTodoModal = () => {
   currentTodo.value = { title: '', text: '', status: 'pending', img: null };
   showTodoModal.value = true;
+  toggleBodyScroll(true);
 };
 
 const openEditTodoModal = (todo) => {
   currentTodo.value = { ...todo };
   showTodoModal.value = true;
+  toggleBodyScroll(true);
+};
+
+const closeTodoModal = () => {
+  showTodoModal.value = false;
+  toggleBodyScroll(false);
 };
 
 const saveTodo = () => {
@@ -273,6 +290,7 @@ const saveTodo = () => {
   showTodoModal.value = false;
   currentTodo.value = { text: '', status: 'pending', img: null };
   saveUserEvents(categories.value);
+  toggleBodyScroll(false);
 };
 
 const handleFileUpload = (event) => {
@@ -293,10 +311,12 @@ const clearImage = () => {
 
 const openCategoryModal = () => {
   showCategoryModal.value = true;
+  toggleBodyScroll(true);
 };
 
 const openDeleteAllCategoriesModal = () => {
   showDeleteAllCategoriesModal.value = true;
+  toggleBodyScroll(true);
 };
 
 const deleteAllCategories = () => {
@@ -304,11 +324,18 @@ const deleteAllCategories = () => {
   selectedCategory.value = null;
   showDeleteAllCategoriesModal.value = false;
   saveUserEvents(categories.value);
+  toggleBodyScroll(false);
+};
+
+const closeDeleteAllCategoriesModal = () => {
+  showDeleteAllCategoriesModal.value = false;
+  toggleBodyScroll(false);
 };
 
 const openDeleteCategoryModal = (category) => {
   categoryToDelete.value = category;
   showDeleteCategoryModal.value = true;
+  toggleBodyScroll(true);
 };
 
 const deleteCategory = () => {
@@ -318,12 +345,19 @@ const deleteCategory = () => {
   }
   showDeleteCategoryModal.value = false;
   saveUserEvents(categories.value);
+  toggleBodyScroll(false);
+};
+
+const closeDeleteCategoryModal = () => {
+  showDeleteCategoryModal.value = false;
+  toggleBodyScroll(false);
 };
 
 const openEditCategoryModal = (category) => {
   editingCategory.value = category;
   newCategoryName.value = category.name;
   showCategoryModal.value = true;
+  toggleBodyScroll(true);
 };
 
 const editCategory = () => {
@@ -333,18 +367,26 @@ const editCategory = () => {
     showCategoryModal.value = false;
     newCategoryName.value = '';
     editingCategory.value = null;
+    toggleBodyScroll(false);
   }
 };
 
 const openDeleteTodoModal = (todo) => {
   todoToDelete.value = todo;
   showDeleteTodoModal.value = true;
+  toggleBodyScroll(true);
 };
 
 const deleteTodo = () => {
   removeTodoFromStore(selectedCategory.value, todoToDelete.value.id);
   showDeleteTodoModal.value = false;
   saveUserEvents(categories.value);
+  toggleBodyScroll(false);
+};
+
+const closeDeleteTodoModal = () => {
+  showDeleteTodoModal.value = false;
+  toggleBodyScroll(false);
 };
 
 onMounted(() => {
@@ -360,7 +402,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  document.body.style.overflow = '' 
   if (typeof window !== 'undefined') {
     window.removeEventListener('resize', handleResize);
   }
@@ -498,7 +539,7 @@ watch(categories, (newCategories) => {
   grid-template-columns: repeat(4, 1fr)
   gap: 20px
   align-items: center
-  padding: 10px 0
+  padding: 10px
 
   &.no-img
     grid-template-columns: repeat(3, 1fr)
@@ -518,12 +559,13 @@ watch(categories, (newCategories) => {
   text-overflow: ellipsis
 
 .modal
-  pointer-events: auto
   display: flex
   flex-direction: column
   gap: 10px
 
 .event__modal
+  position: relative
+  z-index: 11
   max-height: 80vh
   overflow-y: scroll
   scrollbar-width: none
@@ -579,7 +621,7 @@ watch(categories, (newCategories) => {
 
   .profile__aside
     position: absolute
-    overflow-y: auto
+    overflow: hidden
     top: 0
     left: 0
     width: 100%
