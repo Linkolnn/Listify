@@ -518,6 +518,7 @@ watch(categories, (newCategories) => {
   text-overflow: ellipsis
 
 .modal
+  pointer-events: auto
   display: flex
   flex-direction: column
   gap: 10px
