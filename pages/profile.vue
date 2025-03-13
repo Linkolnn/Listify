@@ -192,22 +192,26 @@ const shouldShowAside = computed(() => {
 const toggleAside = () => {
   if (aside.value) {
     animateAsideClose('.profile__aside', () => {
-      aside.value = false;
-    });
+      aside.value = false
+      document.body.style.overflow = '' // Разблокируем прокрутку
+    })
   } else {
-    aside.value = true;
-    animateAsideOpen('.profile__aside');
+    aside.value = true
+    document.body.style.overflow = 'hidden' // Блокируем прокрутку
+    animateAsideOpen('.profile__aside')
   }
-};
+}
 
 const handleResize = () => {
-  isMobile.value = window.innerWidth <= 859;
+  isMobile.value = window.innerWidth <= 859
   if (!isMobile.value) {
-    aside.value = true;
+    aside.value = true
+    document.body.style.overflow = '' // Убедимся что прокрутка включена на десктопе
   } else {
-    aside.value = false;
+    aside.value = false
+    document.body.style.overflow = '' // Сброс при изменении размера
   }
-};
+}
 
 const pendingTodos = computed(() => selectedCategory.value?.todos.filter(todo => todo.status === 'pending') || []);
 
@@ -235,6 +239,7 @@ const addCategory = () => {
   if (isMobile.value) {
     aside.value = false;
   }
+  document.body.style.overflow = '' 
 };
 
 const selectCategory = (category) => {
@@ -274,6 +279,7 @@ const handleFileUpload = (event) => {
   };
   reader.readAsDataURL(file);
 };
+
 const clearImage = () => {
   currentTodo.value.img = null;
 };
@@ -283,6 +289,7 @@ const openCategoryModal = () => {
   if (isMobile.value) {
     aside.value = false;
   }
+  document.body.style.overflow = '' 
 };
 
 const openDeleteAllCategoriesModal = () => {
@@ -290,6 +297,7 @@ const openDeleteAllCategoriesModal = () => {
   if (isMobile.value) {
     aside.value = false;
   }
+  document.body.style.overflow = '' 
 };
 
 const deleteAllCategories = () => {
@@ -302,6 +310,7 @@ const deleteAllCategories = () => {
 const openDeleteCategoryModal = (category) => {
   categoryToDelete.value = category;
   showDeleteCategoryModal.value = true;
+  document.body.style.overflow = '' 
 };
 
 const deleteCategory = () => {
@@ -317,6 +326,7 @@ const openEditCategoryModal = (category) => {
   editingCategory.value = category;
   newCategoryName.value = category.name;
   showCategoryModal.value = true;
+  document.body.style.overflow = '' 
 };
 
 const editCategory = () => {
@@ -353,6 +363,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  document.body.style.overflow = '' 
   if (typeof window !== 'undefined') {
     window.removeEventListener('resize', handleResize);
   }
