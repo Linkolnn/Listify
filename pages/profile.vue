@@ -230,12 +230,6 @@ const getCompletedCount = (category) => {
   return category.todos?.filter(todo => todo.status === 'completed').length || 0
 }
 
-const pendingTodos = computed(() => selectedCategory.value?.todos.filter(todo => todo.status === 'pending') || []);
-
-const inProgressTodos = computed(() => selectedCategory.value?.todos.filter(todo => todo.status === 'in-progress') || []);
-
-const completedTodos = computed(() => selectedCategory.value?.todos.filter(todo => todo.status === 'completed') || []);
-
 const filteredTodos = computed(() => {
   if (!selectedCategory.value?.todos) return [];
   const searchTerm = searchQuery.value.toLowerCase();
@@ -386,6 +380,7 @@ watch(categories, (newCategories) => {
   position: relative
   display: flex
   padding: 0px !important
+  max-height: 90vh
 
 .profile__aside 
   display: flex

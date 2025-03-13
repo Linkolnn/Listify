@@ -20,7 +20,7 @@
   border-radius: $radius
   padding: 10px
   background: $white
-  max-height: 90vh
+  min-height: 90vh
 
 @include mobile
   .section
