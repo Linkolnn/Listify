@@ -242,8 +242,6 @@ const addCategory = () => {
   showCategoryModal.value = false;
   saveUserEvents(categories.value);
   selectCategory(newCategory);
-
-  document.body.style.overflow = '' 
 };
 
 const selectCategory = (category) => {
@@ -290,12 +288,10 @@ const clearImage = () => {
 
 const openCategoryModal = () => {
   showCategoryModal.value = true;
-  document.body.style.overflow = '' 
 };
 
 const openDeleteAllCategoriesModal = () => {
   showDeleteAllCategoriesModal.value = true;
-  document.body.style.overflow = '' 
 };
 
 const deleteAllCategories = () => {
@@ -308,7 +304,6 @@ const deleteAllCategories = () => {
 const openDeleteCategoryModal = (category) => {
   categoryToDelete.value = category;
   showDeleteCategoryModal.value = true;
-  document.body.style.overflow = '' 
 };
 
 const deleteCategory = () => {
@@ -324,7 +319,6 @@ const openEditCategoryModal = (category) => {
   editingCategory.value = category;
   newCategoryName.value = category.name;
   showCategoryModal.value = true;
-  document.body.style.overflow = '' 
 };
 
 const editCategory = () => {
