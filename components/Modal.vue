@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" @click.self="close">
+  <div class="modal-overlay" @click.self="close">
     <div class="modal__content">
       <button class="modal__close" @click="close">X</button>
       <slot></slot>
@@ -15,8 +15,8 @@ function close() {
 }
 </script>
 
-<style scoped>
-.modal {
+<style lang="sass">
+.modal-overlay 
   position: fixed;
   z-index: 10;
   top: 0;
@@ -27,24 +27,26 @@ function close() {
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.modal__content {
+
+.modal__content 
   margin: 0 20px;
   max-width: 300px;
   background: white;
   padding: 20px;
   border-radius: 10px;
   position: relative;
-}
 
-.modal__close {
+
+.modal__close 
   position: absolute;
+  width: 30px
+  height: 30px
   top: 10px;
   right: 10px;
   background: none;
   border: none;
   font-size: 20px;
   cursor: pointer;
-}
+
 </style>

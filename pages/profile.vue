@@ -5,13 +5,16 @@
       :class="{active: aside}"
       v-show="shouldShowAside"
     >
-      <h2>Список событий</h2>
+      <div class="profile__aside-header">
+        <h2>Список событий</h2>
+        <button class="modal__close" @click="toggleAside">x</button>
+      </div>
       <div class="profile__aside-btnblock">
         <button class="btn profile__aside-btn" @click="openCategoryModal">
           Добавить
         </button>
-        <button class="btn profile__aside-btn profile__aside-btn--add" @click="toggleAside">
-          X
+        <button class="btn profile__delete-btn" @click="openDeleteAllCategoriesModal">
+          Удалить всё
         </button>
       </div>
       <ul class="profile__categories">
@@ -22,8 +25,22 @@
           class="profile__categories-item"
         >
           <h2 class="profile__categories-text">{{ category.name }}</h2>
+          <div class="profile__todo-status">
+            <div class="profile__todo-status-item">
+              <h3 class="font-text_medium">В ожидании</h3>
+              <p>{{ getPendingCount(category) }}</p>
+            </div>
+            <div class="profile__todo-status-item">
+              <h3 class="font-text_medium">В разработке</h3>
+              <p>{{ getInProgressCount(category) }}</p>
+            </div>
+            <div class="profile__todo-status-item">
+              <h3 class="font-text_medium">Сделано</h3>
+              <p>{{ getCompletedCount(category) }}</p>
+            </div>
+          </div>
           <div class="profile__categories-btnblock">
-            <button class="btn profile__category-btn" @click.stop="openEditCategoryModal(category)">
+            <button class="btn profile__category-btn profile__edit-btn" @click.stop="openEditCategoryModal(category)">
               Изменить
             </button>
             <button class="btn profile__category-btn profile__delete-btn" @click.stop="openDeleteCategoryModal(category)">
@@ -32,9 +49,6 @@
           </div>
         </li>
       </ul>
-      <button class="btn profile__delete-btn" @click="openDeleteAllCategoriesModal">
-        Удалить всё
-      </button>
     </aside>
     <main class="profile__main">
       <div v-if="!selectedCategory" class="profile__main-welcome">
@@ -55,20 +69,6 @@
             <IconProfileIconL class="profile-icon" filled/>
             Список
           </button>
-        </div>
-        <div class="profile__todo-status">
-          <div class="profile__todo-status-item">
-            <h3 class="font-text_medium">В ожидании</h3>
-            <p>{{ pendingTodos.length }}</p>
-          </div>
-          <div class="profile__todo-status-item">
-            <h3 class="font-text_medium">В разработке</h3>
-            <p>{{ inProgressTodos.length }}</p>
-          </div>
-          <div class="profile__todo-status-item">
-            <h3 class="font-text_medium">Сделано</h3>
-            <p>{{ completedTodos.length }}</p>
-          </div>
         </div>
         <input type="text" class="inp profile__search" v-model="searchQuery" placeholder="Поиск событий" />
         <button class="btn profile__add-todo" @click="openAddTodoModal">Создать событие</button>
@@ -138,7 +138,6 @@
       <h3 class="event-modal__title">Удалить все категории</h3>
       <p>Вы уверены, что хотите удалить все категории? Это действие необратимо.</p>
       <button class="event-modal__btn profile__delete-btn btn" @click="deleteAllCategories">Удалить</button>
-      <button class="event-modal__btn btn" @click="showDeleteAllCategoriesModal = false">Отмена</button>
     </div>
   </Modal>
   <Modal v-if="showDeleteCategoryModal" @close="showDeleteCategoryModal = false">
@@ -146,7 +145,6 @@
       <h3 class="event-modal__title">Удалить категорию</h3>
       <p>Вы уверены, что хотите удалить категорию "{{ categoryToDelete?.name }}"? Это действие необратимо.</p>
       <button class="event-modal__btn profile__delete-btn btn" @click="deleteCategory">Удалить</button>
-      <button class="event-modal__btn btn" @click="showDeleteCategoryModal = false">Отмена</button>
     </div>
   </Modal>
   <Modal v-if="showDeleteTodoModal" @close="showDeleteTodoModal = false">
@@ -154,7 +152,6 @@
       <h3 class="event-modal__title">Удалить событие</h3>
       <p>Вы уверены, что хотите удалить событие "{{ todoToDelete?.title }}"? Это действие необратимо.</p>
       <button class="event-modal__btn profile__delete-btn btn" @click="deleteTodo">Удалить</button>
-      <button class="event-modal__btn btn" @click="showDeleteTodoModal = false">Отмена</button>
     </div>
   </Modal>
 </template>
@@ -190,33 +187,47 @@ const shouldShowAside = computed(() => {
 });
 
 const toggleAside = () => {
+  if (!isMobile.value) return 
+  
   if (aside.value) {
     animateAsideClose('.profile__aside', () => {
       aside.value = false
-      document.body.style.overflow = '' // Разблокируем прокрутку
+      document.body.style.overflow = ''
     })
   } else {
     aside.value = true
-    document.body.style.overflow = 'hidden' // Блокируем прокрутку
+    document.body.style.overflow = 'hidden'
     animateAsideOpen('.profile__aside')
   }
 }
 
 const handleCategoryModalClose = () => {
   showCategoryModal.value = false
-  editingCategory.value = null // Сбрасываем редактируемую категорию
-  newCategoryName.value = '' // Очищаем поле ввода
+  editingCategory.value = null 
+  newCategoryName.value = '' 
 }
 
 const handleResize = () => {
   isMobile.value = window.innerWidth <= 859
   if (!isMobile.value) {
     aside.value = true
-    document.body.style.overflow = '' // Убедимся что прокрутка включена на десктопе
+    document.body.style.overflow = '' 
   } else {
     aside.value = false
-    document.body.style.overflow = '' // Сброс при изменении размера
+    document.body.style.overflow = '' 
   }
+}
+
+const getPendingCount = (category) => {
+  return category.todos?.filter(todo => todo.status === 'pending').length || 0
+}
+
+const getInProgressCount = (category) => {
+  return category.todos?.filter(todo => todo.status === 'in-progress').length || 0
+}
+
+const getCompletedCount = (category) => {
+  return category.todos?.filter(todo => todo.status === 'completed').length || 0
 }
 
 const pendingTodos = computed(() => selectedCategory.value?.todos.filter(todo => todo.status === 'pending') || []);
@@ -382,7 +393,7 @@ watch(categories, (newCategories) => {
   gap: 10px
   border-radius: $radius
   padding: 10px
-  width: 300px;
+  width: 350px;
   background: $white
 
 .profile__toggle-aside
@@ -390,8 +401,7 @@ watch(categories, (newCategories) => {
 
 .profile__aside-btnblock
   display: flex
-  flex-direction: row
-  justify-content: space-between
+  flex-direction: column
   gap: 10px
 
 .profile__aside-btn
@@ -400,6 +410,9 @@ watch(categories, (newCategories) => {
 .profile__aside-btn--add
   display: none
 
+.profile__edit-btn
+  width: 100%
+
 .profile__delete-btn
   background: $red !important
   color: $white !important
@@ -407,14 +420,13 @@ watch(categories, (newCategories) => {
 .profile__categories
   display: flex 
   flex-direction: column
-  height: 75vh
   overflow-y: auto
   gap: 20px
 
 .profile__categories-item
   border-radius: $radius
   display: flex
-  padding: 10px 0px
+  padding: 10px 
   background: $white
   flex-direction: column
   justify-content: space-between
@@ -471,8 +483,11 @@ watch(categories, (newCategories) => {
 .profile__todo-status-item 
   text-align: center
 
+  .font-text_medium
+    font-size: 12px
+
 .profile__todo-list 
-  max-height: 80vh
+  max-height: 60vh
   overflow-y: auto
   list-style-type: none;
   padding: 0
@@ -568,6 +583,7 @@ watch(categories, (newCategories) => {
 
   .profile__aside
     position: absolute
+    overflow-y: auto
     top: 0
     left: 0
     width: 100%
@@ -577,8 +593,8 @@ watch(categories, (newCategories) => {
     transform: translateX(-100%)
     @include transition
 
-  .profile__categories
-    height: 80vh
+  .profile__aside-btnblock
+    flex-direction: row
 
   .profile__aside-btn
     width: max-content
