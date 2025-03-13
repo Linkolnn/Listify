@@ -39,7 +39,7 @@
     <main class="profile__main">
       <div v-if="!selectedCategory" class="profile__main-welcome">
         <h1 v-show="!isMobile"> {{ categories == 0 ? 'Создайте' : 'Выберите' }} категорию из списка</h1>
-        <h1 v-show="isMobile">Нажмите на кнопку чтобы выбрать категорию</h1>
+        <h1 v-show="isMobile">Нажмите на кнопку чтобы {{ categories == 0 ? 'создать' : 'выбрать' }} категорию</h1>
         <button 
           class="btn profile__toggle-aside" 
           v-show="isMobile" 
