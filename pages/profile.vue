@@ -21,7 +21,7 @@
           @click="selectCategory(category)"
           class="profile__categories-item"
         >
-          <p class="profile__categories-text">{{ category.name }}</p>
+          <h2 class="profile__categories-text">{{ category.name }}</h2>
           <div class="profile__categories-btnblock">
             <button class="btn profile__category-btn" @click="openEditCategoryModal(category)">
               Изменить
