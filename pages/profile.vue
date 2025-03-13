@@ -566,7 +566,7 @@ watch(categories, (newCategories) => {
 
 .event__modal
   position: relative
-  z-index: 11
+  z-index: 10
   max-height: 80vh
   overflow-y: scroll
   scrollbar-width: none
@@ -627,7 +627,7 @@ watch(categories, (newCategories) => {
     left: 0
     width: 100%
     height: 100%
-    z-index: 9
+    z-index: 8
     padding: 20px
     transform: translateX(-100%)
     @include transition

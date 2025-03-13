@@ -17,8 +17,8 @@ function close() {
 
 <style lang="sass">
 .modal-overlay 
-  position: absolute;
-  z-index: 10;
+  position: fixed;
+  z-index: 9;
   top: 0;
   left: 0;
   width: 100%;
@@ -40,6 +40,7 @@ function close() {
 
 .modal__close 
   position: absolute;
+  z-index: 11
   width: 30px
   height: 30px
   top: 10px;
