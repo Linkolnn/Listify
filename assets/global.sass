@@ -1,0 +1,62 @@
+@import 'mixin'
+@import 'color'
+
+$radius: 10px
+
+* 
+    padding: 0
+    margin: 0
+    border: none
+    font-family: 'Source-Sans-3' , sans-serif
+    text-decoration: none
+    box-sizing: border-box
+    list-style-type: none
+    
+body
+    background: $light-grey
+
+body.no-scroll
+    overflow: hidden
+    
+.nuxt-link 
+    text-decoration: none
+
+.nuxt-icon
+    margin: 0
+
+.btn
+    min-width: 40px
+    min-height: 40px 
+    font-size: 16px
+    padding: 10px
+    border-radius: $radius
+    color: $white
+    background: $black
+    @include transition
+
+.inp
+    font-size: 16px
+    padding: 10px
+    background: $light-grey
+    border-radius: $radius
+
+.textarea
+    resize: vertical
+    min-height: 100px
+    max-height: 150px
+
+.about__text
+    word-wrap: break-word
+    hyphens: auto
+
+@include hover 
+    .btn:hover 
+        background: $grey
+        @include transition
+        
+@include mobile
+    .btn:active 
+        background: $grey
+        @include transition
+
+
