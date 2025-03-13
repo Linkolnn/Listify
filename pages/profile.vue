@@ -7,7 +7,7 @@
     >
       <div class="profile__aside-header">
         <h2>Список событий</h2>
-        <button class="modal__close" @click="toggleAside">x</button>
+        <button v-if="isMobile" class="modal__close" @click="toggleAside">x</button>
       </div>
       <div class="profile__aside-btnblock">
         <button class="btn profile__aside-btn" @click="openCategoryModal">
@@ -31,7 +31,7 @@
               <p>{{ getPendingCount(category) }}</p>
             </div>
             <div class="profile__todo-status-item">
-              <h3 class="font-text_medium">В разработке</h3>
+              <h3 class="font-text_medium">В процессе</h3>
               <p>{{ getInProgressCount(category) }}</p>
             </div>
             <div class="profile__todo-status-item">
@@ -73,17 +73,16 @@
         <input type="text" class="inp profile__search" v-model="searchQuery" placeholder="Поиск событий" />
         <button class="btn profile__add-todo" @click="openAddTodoModal">Создать событие</button>
         <ul class="profile__todo-list">
-          <li v-for="todo in filteredTodos" :key="todo.id" :class="{'profile__todo-item': true, 'no-img': !todo.img}">
+          <li v-for="todo in filteredTodos" @click="openEditTodoModal(todo)" :key="todo.id" :class="{'profile__todo-item': true, 'no-img': !todo.img}">
             <img class="profile__todo-img" v-if="todo.img" :src="todo.img" alt="Event image" />
             <h3 class="profile__todo-title">{{ todo.title }}</h3> 
             <span class="profile__todo-text"> {{ todo.text }} </span>
             <div class="profile__todo-btnblock">
               <select class="profile__todo-select inp" v-model="todo.status">
                 <option value="pending">В ожидании</option>
-                <option value="in-progress">В разработке</option>
+                <option value="in-progress">В процессе</option>
                 <option value="completed">Сделано</option>
               </select>
-              <button class="btn" @click="openEditTodoModal(todo)">Изменить</button>
               <button class="btn profile__delete-btn" @click="openDeleteTodoModal(todo)">Удалить</button>
             </div>
           </li>
@@ -118,7 +117,7 @@
       </div>
       <select class="event-modal__select inp" v-model="currentTodo.status">
         <option value="pending">В ожидании</option>
-        <option value="in-progress">В разработке</option>
+        <option value="in-progress">В процессе</option>
         <option value="completed">Сделано</option>
       </select>
       <label class="event-modal__file-upload btn">
@@ -463,6 +462,7 @@ watch(categories, (newCategories) => {
 .profile__categories-item
   border-radius: $radius
   display: flex
+  cursor: pointer
   padding: 10px 
   background: $white
   flex-direction: column
@@ -481,10 +481,13 @@ watch(categories, (newCategories) => {
     justify-content: flex-end
     gap: 10px
 
-
 .profile__main 
   padding: 20px
   width: 100%
+  display: flex
+  flex-direction: column
+  gap: 10px
+  overflow: hidden // Add this line to prevent overflow
 
 .profile__main-welcome
   height: 100%
@@ -500,6 +503,8 @@ watch(categories, (newCategories) => {
   display: flex;
   flex-direction: column
   gap: 10px
+  flex-grow: 1
+  overflow: hidden // Add this line to prevent overflow
 
 .profile__todo-header
   display: flex
@@ -524,7 +529,7 @@ watch(categories, (newCategories) => {
     font-size: 12px
 
 .profile__todo-list 
-  max-height: 60vh
+  flex-grow: 1
   overflow-y: auto
   list-style-type: none;
   padding: 0
@@ -541,7 +546,8 @@ watch(categories, (newCategories) => {
   gap: 20px
   align-items: center
   padding: 10px
-
+  cursor: pointer
+  @include transition
   &.no-img
     grid-template-columns: repeat(3, 1fr)
 
@@ -606,6 +612,12 @@ watch(categories, (newCategories) => {
 @include hover 
   .profile__categories-item:hover
     background: $light-grey
+  
+  .profile__todo-item:hover
+    background: $light-grey
+
+    .profile__todo-select
+      background: $white
 
 @include mobile 
   .profile__categories-item:active
@@ -615,6 +627,9 @@ watch(categories, (newCategories) => {
     display: flex
     flex-direction: column 
     align-items: stretch
+    
+  .profile__todo-item:active
+    background: $light-grey
 
   .profile__todo-img
     height: 40vh
