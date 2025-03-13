@@ -257,6 +257,7 @@ const addCategory = () => {
   showCategoryModal.value = false;
   saveUserEvents(categories.value);
   selectCategory(newCategory);
+  toggleBodyScroll(false);
 };
 
 const selectCategory = (category) => {
