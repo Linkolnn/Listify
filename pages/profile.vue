@@ -554,10 +554,6 @@ watch(categories, (newCategories) => {
   .profile__categories-item:active
     background: $light-grey
 
-  .profile__todo-status
-    // display: none
-    // flex-direction: column 
-
   .profile__todo-item
     display: flex
     flex-direction: column 
@@ -577,6 +573,9 @@ watch(categories, (newCategories) => {
     padding: 20px
     transform: translateX(-100%)
     @include transition
+
+  .profile__categories
+    height: 80vh
 
   .profile__aside-btn
     width: max-content
