@@ -66,7 +66,6 @@
         <div class="profile__todo-header">
           <h2>{{ selectedCategory.name }}</h2>
           <button v-if="isMobile" class="btn" @click="toggleAside">
-            <IconProfileIconL class="profile-icon" filled/>
             Список
           </button>
         </div>
@@ -155,6 +154,7 @@
   </Modal>
 </template>
 <script setup>
+import { IconLightProfileIcon } from '#components';
 import { useEvents } from '@composables/useEvents';
 import { animateAsideOpen, animateAsideClose } from '@utils/animations';
 
@@ -487,7 +487,7 @@ watch(categories, (newCategories) => {
   display: flex
   flex-direction: column
   gap: 10px
-  overflow: hidden // Add this line to prevent overflow
+  overflow: hidden
 
 .profile__main-welcome
   height: 100%
@@ -504,7 +504,7 @@ watch(categories, (newCategories) => {
   flex-direction: column
   gap: 10px
   flex-grow: 1
-  overflow: hidden // Add this line to prevent overflow
+  overflow: hidden 
 
 .profile__todo-header
   display: flex

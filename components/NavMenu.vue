@@ -44,11 +44,12 @@ const toggleDropdown = () => {
                           class="profile-btn btn"
                           @click="toggleDropdown"
                         >
-                          <IconProfileIconL class="profile-icon" filled/>
+                          <IconPL class="profile-icon" filled/>
                         </button>
                         <div v-show="showDropdown" class="dropdown-menu">
+                          <button class="modal__close" @click="toggleDropdown">X</button>
                             <div class="dropdown-header">
-                              <IconProfile class="dropdown-icon" filled/>
+                              <IconPB class="dropdown-icon" filled/>
                               <span class="font-text_medium" v-if="currentUser">{{ currentUser.name }}</span>
                             </div>
                             <div class="dropdown-btnblock">

@@ -2,7 +2,7 @@
     <footer class="footer">
         <NuxtLink class="footer__logo-link" to="/">
             <button class="footer__logo-btn btn">
-                <IconProfileIconL class="footer__logo-icon" filled/>
+                <IconLightProfileIcon class="footer__logo-icon" filled/>
                 Listify
             </button>
         </NuxtLink>

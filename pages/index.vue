@@ -18,9 +18,9 @@ onMounted(() => {
               <IconProfile class="welcome__title-icon" filled /> Listify
             </h1>
             <p class="welcome__text font-text_extra-large">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Listify это электронный органайзер, в котором можно создавать категории и уже в созданной категории составлять список дел. 
               <span>
-                Totam quos amet facere eos consequatur ipsam saepe itaque distinctio culpa sapiente. Eius ullam nisi dolor quo perferendis cum, dolorem quod porro!
+                Все данные защищены при помощи Crypto Js, что обеспечивает высокий уровень безопасности и конфиденциальности ваших записей.
               </span>
             </p>
             <div class="welcome__btn-block">
@@ -39,20 +39,25 @@ onMounted(() => {
                 <IconProfile class="about__title-icon" filled /> Listify
             </h1>
             <p class="about__text font-text_extra-large" lang="ru">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda eligendi dolorum dignissimos. Neque natus tempora iure, consequatur nulla ducimus illum adipisci eos, blanditiis libero iusto sunt quibusdam, quas quo praesentium?
+                Проект Listify это ваш надежный электронный органайзер. Создавайте категории и списки дел, чтобы организовать свои задачи и дела. 
             </p>
-            <h4 class="font-h4">Lorem ipsum dolor sit, amet consectetur adipisicing elit:</h4>
-            <p class="about__text font-medium" lang="ru">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, delectus aperiam magni magnam veniam impedit laborum cum nobis facere fugit sapiente ab illo praesentium doloribus. Porro labore repellat pariatur sapiente.            
+            <h4 class="font-h4">Основные возможности:</h4>
+            <p class="about__text font-text_extra-large" >
+                - Создание и управление категориями.
+                - Составление списков дел в каждой категории.
+                - Защита данных с помощью Crypto Js.
+                - Удобный и интуитивно понятный интерфейс.
             </p>
-            <p class="about__text font-medium" lang="ru">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, delectus aperiam magni magnam veniam impedit laborum cum nobis facere fugit sapiente ab illo praesentium doloribus. Porro labore repellat pariatur sapiente.
+            <p class="about__text font-text_extra-large" >
+                Listify помогает вам оставаться организованным и продуктивным, предоставляя все необходимые инструменты для управления вашими задачами и делами.
             </p>
-            <h4 class="font-h4">Lorem ipsum dolor sit, amet consectetur adipisicing elit:</h4>
-            <p class="about__text font-medium" lang="ru">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, delectus aperiam magni magnam veniam impedit laborum cum nobis facere fugit sapiente ab illo praesentium doloribus. Porro labore repellat pariatur sapiente.            </p>
-            <p class="about__text font-medium" lang="ru">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, delectus aperiam magni magnam veniam impedit laborum cum nobis facere fugit sapiente ab illo praesentium doloribus. Porro labore repellat pariatur sapiente.            </p>
+            <h4 class="font-h4">Безопасность данных:</h4>
+            <p class="about__text font-text_extra-large" >
+                Все данные в Listify защищены с использованием Crypto Js, что гарантирует высокий уровень безопасности и конфиденциальности ваших записей.
+            </p>
+            <p class="about__text font-text_extra-large" >
+                Вы можете быть уверены, что ваши данные надежно защищены и доступны только вам.
+            </p>
         </div>
     </section>
 </template>
@@ -70,27 +75,26 @@ onMounted(() => {
     align-items: center
     gap: 10px
     overflow: hidden
-    
-    #map
-        border: 10px solid $white
-        position: absolute
-        height: 100%
-        width: 100%
+    background: url('../assets/img/ornament.png') center
 
 .welcome__title-icon
     width: 100px
     height: auto
+    path[fill]
+        fill: $black
+    path[stroke]
+        stroke: $black
 
 .welcome__content
     border-radius: $radius
-    background: $white
+    background: $transparent
     padding: 20px
     width: 70%
     z-index: 2
     display: flex
     flex-direction: column
+    justify-content: center
     align-items: center
-    justify-content: flex-end
     gap: 10px
 
 .welcome__title 
@@ -110,12 +114,16 @@ onMounted(() => {
 
 .about 
   display: flex
-  flex-direction: row
+  flex-direction: row-reverse
   align-items: center
   justify-content: space-evenly
   gap: 20px
+  background: url('../assets/img/ornament.png') center
 
 .about__content 
+    border-radius: $radius
+    background: $transparent
+    width: 70%
     padding: 10px
     display: flex
     flex-direction: column
@@ -130,6 +138,7 @@ onMounted(() => {
     align-self: center
 
 .about__img
+    border-radius: $radius
     width: 50%
     object-fit: cover
 
@@ -163,14 +172,12 @@ onMounted(() => {
         flex-direction: column
         gap: 10px
 
+    .about__content
+        width: 100% 
+
     .about__img
         width: 100%
 
     .about__title-icon
         width: 60px
-
-    .about__text
-        word-wrap: break-word
-        hyphens: auto
-
 </style>
