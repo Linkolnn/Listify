@@ -86,7 +86,7 @@ onMounted(() => {
         stroke: $black
 
 .welcome__content
-    border-radius: $radius
+    border-radius: 40px
     background: $transparent
     padding: 20px
     width: 70%
@@ -121,7 +121,7 @@ onMounted(() => {
   background: url('../assets/img/ornament.png') center
 
 .about__content 
-    border-radius: $radius
+    border-radius: 40px
     background: $transparent
     width: 70%
     padding: 10px
@@ -138,7 +138,7 @@ onMounted(() => {
     align-self: center
 
 .about__img
-    border-radius: $radius
+    border-radius: 40px
     width: 50%
     object-fit: cover
 
