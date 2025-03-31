@@ -26,17 +26,27 @@
         >
           <h2 class="profile__categories-text">{{ category.name }}</h2>
           <div class="profile__todo-status">
-            <div class="profile__todo-status-item">
+            <div 
+              class="profile__todo-status-item btn" 
+              @click.stop="toggleStatusFilter('pending', category)"
+            >
               <h3 class="font-text_medium">В ожидании</h3>
               <p>{{ getPendingCount(category) }}</p>
             </div>
-            <div class="profile__todo-status-item">
+            <div 
+              class="profile__todo-status-item btn" 
+              @click.stop="toggleStatusFilter('in-progress', category)"
+            >
               <h3 class="font-text_medium">В процессе</h3>
               <p>{{ getInProgressCount(category) }}</p>
             </div>
-            <div class="profile__todo-status-item">
+            <div 
+              class="profile__todo-status-item btn" 
+              @click.stop="toggleStatusFilter('completed', category)"
+            >
               <h3 class="font-text_medium">Сделано</h3>
               <p>{{ getCompletedCount(category) }}</p>
+          
             </div>
           </div>
           <div class="profile__categories-btnblock">
@@ -76,7 +86,7 @@
             <img class="profile__todo-img" v-if="todo.img" :src="todo.img" alt="Event image" />
             <h3 class="profile__todo-title">{{ todo.title }}</h3> 
             <span class="profile__todo-text"> {{ todo.text }} </span>
-            <div class="profile__todo-btnblock">
+            <div class="profile__todo-btnblock" @click.stop>
               <select class="profile__todo-select inp" v-model="todo.status">
                 <option value="pending">В ожидании</option>
                 <option value="in-progress">В процессе</option>
@@ -154,7 +164,6 @@
   </Modal>
 </template>
 <script setup>
-import { IconLightProfileIcon } from '#components';
 import { useEvents } from '@composables/useEvents';
 import { animateAsideOpen, animateAsideClose } from '@utils/animations';
 
@@ -167,6 +176,7 @@ const showTodoModal = ref(false);
 const newCategoryName = ref('');
 const isMobile = ref(false);
 const aside = ref(false);
+const selectedStatus = ref(null);
 const currentTodo = ref({
   title: '', 
   text: '', 
@@ -191,6 +201,20 @@ const toggleBodyScroll = (disable) => {
   } else {
         document.body.style.overflow = '';
   }
+};
+
+const toggleStatusFilter = (status, category) => {
+  if (selectedCategory.value?.id !== category.id) {
+    selectCategory(category);
+  }
+  
+  if (selectedStatus.value === status) {
+    // Сбрасываем фильтр при повторном клике
+    selectedStatus.value = null;
+  } else {
+    selectedStatus.value = status;
+  }
+  toggleAside()
 };
 
 const toggleAside = () => {
@@ -239,15 +263,23 @@ const getCompletedCount = (category) => {
   return category.todos?.filter(todo => todo.status === 'completed').length || 0
 }
 
+
 const filteredTodos = computed(() => {
   if (!selectedCategory.value?.todos) return [];
   const searchTerm = searchQuery.value.toLowerCase();
+  
   return selectedCategory.value.todos.filter(todo => {
+    // Фильтрация по поиску
     const titleMatch = todo.title?.toLowerCase().includes(searchTerm);
     const textMatch = todo.text?.toLowerCase().includes(searchTerm);
-    return titleMatch || textMatch;
+    
+    // Фильтрация по статусу
+    const statusMatch = !selectedStatus.value || todo.status === selectedStatus.value;
+    
+    return (titleMatch || textMatch) && statusMatch;
   });
 });
+
 
 const addCategory = () => {
   const newCategory = { id: Date.now(), name: newCategoryName.value, todos: [] };
@@ -261,9 +293,10 @@ const addCategory = () => {
 
 const selectCategory = (category) => {
   selectedCategory.value = category;
-  toggleAside()
+  selectedStatus.value = null; // Сбрасываем фильтр при смене категории
+  searchQuery.value = ''; // Сбрасываем поиск
+  toggleAside();
 };
-
 const openAddTodoModal = () => {
   currentTodo.value = { title: '', text: '', status: 'pending', img: null };
   showTodoModal.value = true;
@@ -522,8 +555,10 @@ watch(categories, (newCategories) => {
   display: flex;
   justify-content: space-between
 
-.profile__todo-status-item 
+.profile__todo-status-item.btn 
   text-align: center
+  padding: 5px
+
 
   .font-text_medium
     font-size: 12px
@@ -537,12 +572,12 @@ watch(categories, (newCategories) => {
 .profile__todo-img
   object-fit: cover
   border-radius: $radius
-  height: 20vh 
-  width: 20vw
+  height: 10vh 
+  width: 10vw
 
 .profile__todo-item
   display: grid
-  grid-template-columns: repeat(4, 1fr)
+  grid-template-columns: max-content repeat(3, 1fr)
   gap: 20px
   align-items: center
   padding: 10px
