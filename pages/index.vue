@@ -75,7 +75,8 @@ onMounted(() => {
     align-items: center
     gap: 10px
     overflow: hidden
-    background: url('../assets/img/ornament.png') center
+    background-size: 500%
+    background: url('../assets/img/ornament.png') center/220%
 
 .welcome__title-icon
     width: 100px
@@ -118,7 +119,8 @@ onMounted(() => {
   align-items: center
   justify-content: space-evenly
   gap: 20px
-  background: url('../assets/img/ornament.png') center
+
+  background: url('../assets/img/ornament.png') center/220%
 
 .about__content 
     border-radius: 40px

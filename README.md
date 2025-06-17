@@ -1,5 +1,53 @@
 # Nuxt Minimal Starter
 
+/Listify
+├── assets/                             # Static assets
+│   ├── icons/                          # SVG icons
+│   │   ├── IconProfile.svg
+│   │   ├── LightProfileIcon.svg
+│   │   ├── PB.svg
+│   │   └── PL.svg
+│   ├── img/                            # Image assets
+│   │   ├── ornament.png
+│   │   └── welcomeImg.png
+│   ├── color.sass                        # Color variables
+│   ├── fonts.sass                        # Font definitions
+│   ├── global.sass                       # Global styles
+│   └── mixin.sass                        # SASS mixins
+├── components/                         # Vue components
+│   ├── Footer.vue                        # Footer component
+│   ├── Form.vue                          # Form component
+│   ├── Header.vue                        # Header component
+│   ├── Modal.vue                         # Modal component
+│   └── NavMenu.vue                       # Navigation menu
+├── composables/                        # Vu  e composables
+│   ├── useAuth.js                        # Authentication composable
+│   ├── useEvents.js                      # Events composable
+│   └── useImageStore.js                  # Image store composable
+├── pages/                              # Application pages
+│   ├── index.vue                         # Home page
+│   ├── login.vue                         # Login page
+│   ├── profile.vue                       # Profile page
+│   └── register.vue                      # Registration page
+├── plugins/                              # Nuxt plugins
+├── public/                               # Public static assets
+├── server/                               # Server-side code
+├── services/                             # Service modules
+│   ├── pages/                            # Service pages
+│   │   ├── index.vue
+│   │   ├── login.vue
+│   │   ├── profile.vue
+│   │   └── register.vue
+│   └── data.js                           # Data service
+├── utils/                              # Utility functions
+│   └── animations.js                     # Animation utilities
+├── app.vue                               # Main application component
+├── nuxt.config.ts                        # Nuxt configuration
+├── package.json                          # Project dependencies
+├── tsconfig.json                         # TypeScript configuration
+├── yarn.lock                             # Lock file for yarn
+└── README.md                             # Project documentation
+
 # Lisify
 
 Проект Lisify сделан с использованием фрейморка Nuxt 3 и CryptoJS. Lisify даёт возможность создвать список дел и их категории   
